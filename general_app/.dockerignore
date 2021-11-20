@@ -1,0 +1,6 @@
+.git
+.dockerignore
+deployment
+Dockerfile
+main.go
+.idea

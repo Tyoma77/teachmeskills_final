@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- namespace.yaml
+- deployment.yaml
+- ingress.yaml
+- service.yaml
+namespace: dev
+images:
+- name: registry.gitlab.com/teachmeskills_final/general_app
+  newTag: b69f1395ded0774a60bf2dc545829e82d2af8bcb

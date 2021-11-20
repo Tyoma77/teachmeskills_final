@@ -1,0 +1,21 @@
+include:
+  - project: 'teachmeskills_final/gitlab_piplines'
+    ref: master
+    file: '/apps/go_build.yml'
+  - project: 'teachmeskills_final/gitlab_piplines'
+    ref: master
+    file: '/apps/publish.yml'
+  - project: 'teachmeskills_final/gitlab_piplines'
+    ref: master
+    file: '/apps/sonarqube_check.yml'
+  - project: 'teachmeskills_final/gitlab_piplines'
+    ref: master
+    file: '/apps/deploy.yml'
+
+stages:
+  - build
+  - publish
+  - deploy
+
+
+

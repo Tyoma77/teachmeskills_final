@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gitops-webapp
+  name: gitops-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitops-webapp
+  template:
+    metadata:
+      labels:
+        app: gitops-webapp
+    spec:
+      containers:
+      - image: registry.gitlab.com/teachmeskills_final/general_app:2e0a3ed18eb78264c1ee082a390a72e7a73c4ada
+        name: gitops-webapp
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          name: http
+        env:
+        - name: APP_PORT
+          value: "5000"
+      imagePullSecrets:
+        - name: regcred

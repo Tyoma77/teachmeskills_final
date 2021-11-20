@@ -1,0 +1,44 @@
+stages:
+  - build
+  - plan
+  - deploy
+
+.common:
+  image:
+    name: registry.gitlab.com/teachmeskills_final/infrastructure:latest
+  before_script:
+    - terraform init
+
+build:
+    rules:
+      - if: '$CI_COMMIT_BRANCH == "master"'
+    image: docker:latest
+    before_script:
+      - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
+    stage: build
+    script:
+      - docker build -t registry.gitlab.com/teachmeskills_final/infrastructure .
+      - docker push registry.gitlab.com/teachmeskills_final/infrastructure
+
+plan:
+  extends:
+    - .common
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  stage: plan
+  script:
+    - terraform plan -out infra.plan -input=false
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - infra.plan
+
+deploy:
+  extends:
+    - .common
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+  stage: deploy
+  script:
+    - terraform apply -input=false infra.plan

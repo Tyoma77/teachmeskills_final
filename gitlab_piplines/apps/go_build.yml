@@ -1,0 +1,11 @@
+build:
+  stage: build
+  image:
+    name: golang:1.13.1
+  script:
+    - go build -o main main.go
+  artifacts:
+    paths:
+      - main
+  variables:
+    CGO_ENABLED: 0

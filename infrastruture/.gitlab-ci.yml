@@ -1,0 +1,4 @@
+include:
+  - project: 'teachmeskills_final/gitlab_piplines'
+    ref: master
+    file: '/infrastructure/deploy.yml'

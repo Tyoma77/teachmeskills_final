@@ -1,0 +1,16 @@
+sonarqube:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: cert-manager
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - name: sonarqube.k8sproject.ml
+        path: /
+    tls:
+      - secretName: sonarqube-tls
+        hosts:
+          - sonarqube.k8sproject.ml
+
+  account:
+    adminPassword: admin

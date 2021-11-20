@@ -1,0 +1,21 @@
+deploy-dev:
+  stage: deploy
+  image: alpine:3.11
+  variables:
+    PROJECT_PATH: "app/dev"
+  before_script:
+    - apk add --no-cache git curl bash
+    - curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+    - mv kustomize /usr/local/bin/
+    - git config --global user.email "gitlab@gitlab.com"
+    - git config --global user.name "GitLab CI/CD"
+  script:
+    - git clone https://$ARGO_USER:$CI_DEPLOY_TOKEN@$ARGO_REPO
+    - cd argo_cd/$PROJECT_PATH
+    - git checkout -B master
+    - kustomize edit set image $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - cat kustomization.yaml
+    - git commit -am '[skip ci] DEV image update to $CI_COMMIT_SHA'
+    - git push origin master
+  only:
+    - master

@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  project: infra
+  source:
+    repoURL: 'https://gitlab.com/teachmeskills_final/argo_cd.git'
+    path: infra/prometheus-stack/prometheus-stack
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+      releaseName: prometheus
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
